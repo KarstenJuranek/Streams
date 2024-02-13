@@ -59,6 +59,7 @@ public class Main {
             
             Der Stream.builder wird verwendet, wenn nicht alle Elemente gleichzeitig verfügbar sind
             oder erst Schrittweise eingefügt werden. addAll(Funktion) / add(einzelne Werte)
+            Er kann keine Werte ausgeben, er dient lediglich zum generieren von Streams
              */
 
             Stream<Integer> Stream1 = L.stream(),
@@ -71,15 +72,15 @@ public class Main {
                     Stream6 = Stream.<Integer>builder()
                             .add(0).add(1).add(2).add(3).add(4)
                             .add(5).add(6).add(7).add(8).add(9)
-                            .build(),
-                    Stream7 = Stream.concat(Stream1, Stream2);
+                            .build();
+            // Stream7 = Stream.concat(Stream1, Stream2);
 
             // Terminale Operation 'count' schließt Stream! Sie können nichtmehr abgerufen werden
             // mit .count wird die Anzahl aller Stream Elemente gezählt
-            
-/System.out.println("Diversifications of Streams:\t"+Stream1.count() + ", \t" + Stream2.count() + ", \t" +
+
+            System.out.println("Diversifications of Streams:\t" + Stream1.count() + ", \t" + Stream2.count() + ", \t" +
                     Stream3.count() + ", \t" + Stream4.count() + ", \t" +
-                    Stream5.count() + ", \t" + Stream6.count() + Stream7.count() + ", \t" +"\n");
+                    Stream5.count() + ", \t" + Stream6.count() + /*Stream7.count() + ", \t" +*/"\n");
 
             // Fragen:
             // 1) Erzeugung eines Streams aus String?
@@ -97,12 +98,11 @@ public class Main {
             String combinedString = StringStream3.collect(Collectors.joining());
             List<String> StringOutput2 = new ArrayList<>();
             StringOutput2.add(combinedString);
-            System.out.println("Whole String:\t"+StringOutput2+"\n");
+            System.out.println("Whole String:\t" + StringOutput2 + "\n");
 
             // Direkte Ausgabe in der Konsole des Streams
             // System.out.print("StringStream3:\t");
             // StringStream3.forEach(System.out::print);                
-  
 
             // 2) Was passiert bei Stream3, wenn kein Limit gesetzt wird?
             //      Es werden unendlich viele Werte generiert, die den Speicher zum crashen bringen
@@ -125,12 +125,62 @@ public class Main {
 
             // Aufgaben:
             // 1a) Stream von engl. Alphabet-Zeichen 'A' bis 'Z' in Reihenfolge
+            Stream<String> alphaStream1 = Stream.<String>builder().add("A").add("B").build(),
+                    alphaStream2 = Stream.of("A", "B", "...");
+
+            System.out.println("Möglichkeit 1:\t");
+            alphaStream1.forEach(System.out::print);
+            System.out.println("\n\nMöglichkeit 2:\t");
+            alphaStream2.forEach(System.out::print);
+            System.out.println("\n\n" + "Möglichkeit 3:");
+
+            // Alternative Möglichkeit mit Stream.generate und der range Methode
+            // +1 damit auch der Buchstabe Z generiert wird
+            // Da jeder ASCII Wert eine Ganzzahl repräsentiert können die Werte zwischen 
+            // Start und Endpunkt wiedergegeben werden.
+            IntStream alphaStream3 = IntStream.range('A', 'Z' + 1);
+            alphaStream3.mapToObj(X -> (char) X).forEach(System.out::print);
+            System.out.println();
+
             //  b) Stream von N Zufallszeichen zw. 'A' und 'Z' (Unicode 65-90)
+            // Erstellen der Random Zahlen
+            Random RZ = new Random();
+            int N = 10;
+
+            String randomChars = RZ
+                    // Size,Origin,Bound Festlegen des Bereichs
+                    .ints(N, 65, 91)
+                    // Zahlen werden in Buchstaben umgewandelt
+                    .mapToObj(i -> (char) i)
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
+
+            // Alternative Ausgabe, wenn die Werte ohne Trennung wiedergegeben werden sollen.
+            /* Sammeln der Zufallszahlen in einem Stringbuilder --> nach mapToObj
+            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+            .toString();*/
+
+            System.out.println("\nZufallszeichen des Alphabets \t" + randomChars + "\n");
+
             // 2a) Stream von Strings {"to", "do", "or", "not", "to", "do"}
+            List<String> StringList2 = new ArrayList<String>(List.of("to", "do", "or", "not", "to", "do"));
+            String StringStream4 = StringList2.stream().collect(Collectors.joining(" "));
+            System.out.println("Ausgabe eines Strings:\t" + StringStream4 + "\n");
+
             //  b) Stream von 2a) plus {"-", "that", "is", "the", "decision"}
+            List<String> StringList3 = new ArrayList<String>(List.of("-", "that", "is", "the", "decision"));
+            String StringStream5 = StringList3.stream().collect(Collectors.joining(" "));
+            String StringStream6 = Stream.of(StringStream4, StringStream5).collect(Collectors.joining(" "));
+            System.out.println("Beide Streams zusammen:\t" + StringStream6 + "\n");
+
             // 3a) Stream von 9 Doubles zw. 0.0 und 1.0 in 0.125er-Schritten
             //  b) Stream von 8 Zufallsbits als boolsche Werte false vs true
             // 4a) IntStream mit Werten zw. 0 und 9 als Stream<Integer>
+            Random RandomInts = new Random();
+            Stream<Integer> randomInts = RandomInts.ints(0, 10).limit(10).boxed();
+            String randomIntsResult = randomInts.map(Object::toString).collect(Collectors.joining(", "));
+            System.out.println("Random Zahlen von 0-9: \t" + randomIntsResult + "\n");
+
             //  b) String "Hello World" per CodePoints als Stream<Integer>
         }
 
