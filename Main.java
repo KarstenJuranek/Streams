@@ -174,7 +174,23 @@ public class Main {
             System.out.println("Beide Streams zusammen:\t" + StringStream6 + "\n");
 
             // 3a) Stream von 9 Doubles zw. 0.0 und 1.0 in 0.125er-Schritten
+            DoubleStream dS = DoubleStream.iterate(0.0, d -> d <= 1.0, d -> d + 0.125).limit(9);
+            System.out.println("Double Stream Ausgabe");
+            dS.forEach(System.out::print);
+
+            // Alternative Ausgabe in einen gesamten String
+            String result = DoubleStream.iterate(0.0, d -> d <= 1.0, d -> d + 0.125).limit(9)
+                    .mapToObj(d -> String.format("%.3f", d)).collect(Collectors.joining(", "));
+            System.out.println();
+            System.out.println("Alternative Lösung:\n " + result+ "\n");
+
             //  b) Stream von 8 Zufallsbits als boolsche Werte false vs true
+            Random r2 = new Random();
+            IntStream randomBits = r2.ints(8, 0, 2);
+
+            String result2 = randomBits.mapToObj(i -> i == 0 ? "false" : "true").collect(Collectors.joining(", "));
+            System.out.println("Boolsche Ausgabe: \n " + result2 +"\n");
+
             // 4a) IntStream mit Werten zw. 0 und 9 als Stream<Integer>
             Random RandomInts = new Random();
             Stream<Integer> randomInts = RandomInts.ints(0, 10).limit(10).boxed();
