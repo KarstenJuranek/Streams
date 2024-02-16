@@ -130,11 +130,11 @@ public class Main {
                         Stream<String> alphaStream1 = Stream.<String>builder().add("A").add("B").build(),
                                         alphaStream2 = Stream.of("A", "B", "...");
 
-                        System.out.println("Möglichkeit 1:\t");
+                        System.out.print("Möglichkeit 1:\t");
                         alphaStream1.forEach(System.out::print);
-                        System.out.println("\n\nMöglichkeit 2:\t");
+                        System.out.print("\n\nMöglichkeit 2:\t");
                         alphaStream2.forEach(System.out::print);
-                        System.out.println("\n\n" + "Möglichkeit 3:");
+                        System.out.print("\n\n" + "Möglichkeit 3:\t");
 
                         // Alternative Möglichkeit mit Stream.generate und der range Methode
                         // +1 damit auch der Buchstabe Z generiert wird
@@ -162,7 +162,7 @@ public class Main {
                         .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                         .toString();*/
 
-                        System.out.println("\nZufallszeichen des Alphabets \t" + randomChars + "\n");
+                        System.out.println("\nZufallszeichen des Alphabets: \t" + randomChars + "\n");
 
                         // 2a) Stream von Strings {"to", "do", "or", "not", "to", "do"}
                         List<String> StringList2 = new ArrayList<String>(List.of("to", "do", "or", "not", "to", "do"));
@@ -177,14 +177,14 @@ public class Main {
 
                         // 3a) Stream von 9 Doubles zw. 0.0 und 1.0 in 0.125er-Schritten
                         DoubleStream dS = DoubleStream.iterate(0.0, d -> d <= 1.0, d -> d + 0.125).limit(9);
-                        System.out.println("Double Stream Ausgabe");
+                        System.out.print("Double Stream Ausgabe:\t");
                         dS.forEach(System.out::print);
 
                         // Alternative Ausgabe in einen gesamten String
                         String result = DoubleStream.iterate(0.0, d -> d <= 1.0, d -> d + 0.125).limit(9)
                                         .mapToObj(d -> String.format("%.3f", d)).collect(Collectors.joining(", "));
                         System.out.println();
-                        System.out.println("Alternative Lösung:\n " + result + "\n");
+                        System.out.println("Alternative Lösung:\t " + result + "\n");
 
                         //  b) Stream von 8 Zufallsbits als boolsche Werte false vs true
                         Random r2 = new Random();
@@ -192,7 +192,7 @@ public class Main {
 
                         String result2 = randomBits.mapToObj(i -> i == 0 ? "false" : "true")
                                         .collect(Collectors.joining(", "));
-                        System.out.println("Boolsche Ausgabe: \n " + result2 + "\n");
+                        System.out.println("Boolsche Ausgabe: \t " + result2 + "\n");
 
                         // 4a) IntStream mit Werten zw. 0 und 9 als Stream<Integer>
                         Random RandomInts = new Random();
@@ -260,6 +260,7 @@ public class Main {
                         A1 = LI.stream().mapToDouble(X -> (double) X).toArray(),
 
                                         // Gerade Integers entfernen und als Double
+                                        // Funktion mit überprüfung, dann die predicate abfrage zuweisen
                                         A2 = LI.stream()
                                                         .flatMapToDouble(X -> ((X & 1) == 0) ? DoubleStream.empty()
                                                                         : DoubleStream.of(X))
@@ -280,10 +281,52 @@ public class Main {
                         // Aufgaben zu 'map'/'filter':
                         // 1) Transformieren von 10 Integer-Zufallszahlen in ihre
                         //    Hexadezimaldarstellung (als Liste)
+
+                        Random randomInteger = new Random();
+                        int N = 10;
+                        List<String> List1 = randomInteger.ints(N, 0, 100).mapToObj(x -> Integer.toHexString(x))
+                                        .collect(Collectors.toList()); //(Integer::toHexString)
+                        System.out.println("Integer zu Hexzahlen\t" + List1);
+
                         // 2) Alle 'bad words' in Liste ausmarkieren, z.B. stattdessen
                         //    Standardtext ausgeben ("fuck" => ":-)")
+
+                        List<String> proveList = new ArrayList<>(List.of("hello", "fuck", "good", "friendly", "nigga")),
+                                        badWords = new ArrayList<>(List.of("fuck", "nigga")),
+                                        //kein Filter sondern Map da die Liste verändert werden muss
+                                        correctedList2 = proveList.stream().map(X -> badWords.contains(X) ? ":-D" : X)
+                                                        .collect(Collectors.toList());
+                        System.out.println("\nCorrected List:\t" + correctedList2);
+
                         // 3) Leerstrings aus Liste von Strings entfernen
+                        List<String> StringList3 = new ArrayList(List.of("Hello", " ", "", "World", "!")),
+                                        correctedList3 = StringList3.stream()
+                                                        .filter(x -> !x.isEmpty() && !x.equals(" "))
+                                                        .collect(Collectors.toList());
+                        System.out.println("\nLeerzeichen entfernen:\t" + correctedList3);
+
                         // 4) Filtern aller ein- und zweistelligen Schnapszahlen zw. 0 und 99
+                        int[] counter = { 0 };
+                        List<Integer> Schnappszahlen = new ArrayList<>(List.of(11, 22, 33, 44, 55, 66, 77, 88, 99)),
+                                        ListOfInteger = IntStream.range(0, 101).filter(x -> Schnappszahlen.contains(x))
+                                                        .boxed()
+                                                        .collect(Collectors.toList()),
+
+                                        ListOfInteger2 = Stream.iterate(0, x -> x + 1).limit(101).filter(x -> {
+                                                if (x < 11) //Zahlen unter 11 herausfiltern
+                                                        return false;
+                                                //Konvertieren in einen String um auf einzelne Ziffern zuzugreifen
+                                                String numberStr = String.valueOf(x);
+                                                //Exterahieren der ersten Ziffern 1-9
+                                                char firstDigit = numberStr.charAt(0);
+                                                // Überprüfung ob die erste Zahl gleich der 2ten ist
+                                                return numberStr.chars().allMatch(c -> c == firstDigit);
+                                        }).collect(Collectors.toList()),
+
+                                        ListOfInteger3 = Stream.generate(() -> counter[0]++).limit(101)
+                                                        .collect(Collectors.toList());
+                        System.out.println("Schnappszahlen:\t" + ListOfInteger2 + "\n");
+
                 }
                 // Intermediäre/Zentrale Stream-Verarbeitung 2:
                 // Daten transformieren durch (Aus-)Sortieren und Überspringen
@@ -292,25 +335,27 @@ public class Main {
                         List<Integer> LL = new ArrayList<>();
 
                         List<Integer>
-                        // Sortierung, Aussortierung Doppelter
+                        // Sortierung über sorted
                         L1 = L.stream().sorted(Comparator.reverseOrder()).toList(),
+                                        //Aussortierung Doppelter Inhalte
                                         L2 = Stream.of(1, 2, 3, 2, 3, 3).distinct().toList(),
-
+                                        //L2 = L.stream().distinct().toList(),
                                         // Solange verwenden/verwerfen, bis/wie Bedingung erfüllt
-                                        L3 = L.stream().takeWhile(X -> X <= 4)/*.map(X -> X+X)*/.toList(),
-                                        L4 = L.stream().dropWhile(X -> X <= 4)/*.map(X -> X+X)*/.toList(),
+                                        L3 = L.stream().takeWhile(X -> X <= 4)/*.map(X -> X+X)*/.toList(), //verwenden
+                                        L4 = L.stream().dropWhile(X -> X <= 4)/*.map(X -> X+X)*/.toList(), //verwerfen
 
                                         // Ausspähen (ohne Änderung des Streams), Überspringen
                                         L5 = L.stream().peek(LL::add).toList(), // X -> LL.add(X)
+                                        // Verwerfen von einträgen wie dropwhile
                                         L6 = L.stream().skip(5).toList();
 
-                        /*System.out.println("Sortierung: "+L1);
-                        System.out.println("Distinktion: "+L2);
-                        System.out.println("Bearbeitung take: "+L3);
-                        System.out.println("Bearbeitung drop: "+L4);
-                        System.out.println("Herauspicken: "+L5+" / "+LL);
-                        System.out.println("Überspringen: "+L6);
-                        System.out.println();*/
+                        System.out.println("Sortierung: " + L1);
+                        System.out.println("Distinktion: " + L2);
+                        System.out.println("Bearbeitung take: " + L3);
+                        System.out.println("Bearbeitung drop: " + L4);
+                        System.out.println("Herauspicken: " + L5 + " / " + LL);
+                        System.out.println("Überspringen: " + L6);
+                        System.out.println();
                 }
 
                 // Terminale/Finale Stream-Reduktion: Daten zusammenfassen
@@ -323,13 +368,13 @@ public class Main {
                                                 O2 = L.stream().findAny(),
                                                 O3 = L.stream().min(Integer::compare),
                                                 O4 = L.stream().max(Integer::compare);
-                                //System.out.println(O1 + ", " + O2);
-                                //System.out.println(O3 + ", " + O4);
+                                System.out.println("findFirst:\t" + O1 + "\nfindAny:\t" + O2);
+                                System.out.println("min:\t" + O3 + "\nmax:\t" + O4);
 
                                 boolean B1 = L.stream().allMatch(X -> X < 10),
                                                 B2 = L.stream().anyMatch(X -> X % 5 == 0),
                                                 B3 = L.stream().noneMatch(X -> X + X == X);
-                                //System.out.println(B1 + ", " + B2 + ", " + B3);
+                                System.out.println("\nMatches:\t" + B1 + ", " + B2 + ", " + B3 + "\n");
 
                                 //System.out.println();
 
