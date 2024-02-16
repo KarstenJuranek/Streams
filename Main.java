@@ -218,7 +218,7 @@ public class Main {
                 // Daten transformieren durch Abbilden(map) und Filtern(filter)
                 {
                         List<Integer> LI = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-                        List<Character> LC = List.of('A', '0', 'B', '1', 'C', '2');
+                        List<Character> LC = List.of('A', '0', 'b', '1', 'C', '2');
 
                         /*
                         Map Mehoden werden verwendet um die Inhalte zu modifizieren durch eine Function
@@ -240,20 +240,23 @@ public class Main {
                                         L4 = LI.stream()
                                                         .filter(X -> {
                                                                 double Y = Math.sqrt(X); // Berechnung der Wurzel
-                                                                return Y == (int) Y;     // Nur ganzzahlen werden wiedergegeben
+                                                                return Y == (int) Y; // Nur ganzzahlen werden wiedergegeben
                                                         })
                                                         .toList();
 
                         List<Character>
-                        // Zahlen/Ziffern als Zeichen
+                        // Zahlen/Ziffern als Zeichen 
+                        // 0 wird verwendet, da 0 die ASCII zahlt 48 ist und die Integer dazugezählt werden
                         L5 = LI.stream().map(X -> (char) (X + '0')).toList(),
 
                                         // Buchstaben gefiltert
-                                        L6 = LC.stream().filter(C -> Character.isLetter(C))
+                                        // Filterung nach Großbuchstaben etc. upper/lower/isLetter
+                                        L6 = LC.stream().filter(C -> Character.isUpperCase(C))
                                                         .toList(); /*Character::isLetter*/
 
                         double[]
                         // Integer-Zahlen als Double
+                        // toArray um direkt in ein einzelnes Array zu speichern
                         A1 = LI.stream().mapToDouble(X -> (double) X).toArray(),
 
                                         // Gerade Integers entfernen und als Double
