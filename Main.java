@@ -364,24 +364,34 @@ public class Main {
 
                         // Finden/Matchen
                         {
-                                Optional<Integer> O1 = L.stream().findFirst(), // eigentlich returnFirst/Any
+                                // Optional, um sicherzugehen, das ein Element wiedergegeben wird auch wenn die Liste leer ist
+                                Optional<Integer> O1 = L.stream().findFirst(), // Rückgabe des ersten Stream Elements
                                                 O2 = L.stream().findAny(),
                                                 O3 = L.stream().min(Integer::compare),
                                                 O4 = L.stream().max(Integer::compare);
                                 System.out.println("findFirst:\t" + O1 + "\nfindAny:\t" + O2);
                                 System.out.println("min:\t" + O3 + "\nmax:\t" + O4);
 
-                                boolean B1 = L.stream().allMatch(X -> X < 10),
+
+                                // Matches dienen nur zur überprüfung der Listen bspw. ob es Personen mit A anungsbuchstaben gibt etc
+                                boolean B1 = L.stream().allMatch(X -> X < 10), // Überprüfung des gesamten Streams
                                                 B2 = L.stream().anyMatch(X -> X % 5 == 0),
                                                 B3 = L.stream().noneMatch(X -> X + X == X);
                                 System.out.println("\nMatches:\t" + B1 + ", " + B2 + ", " + B3 + "\n");
+                                /*
+                                Beispiele mit Strings
+                                names.stream().allMatch(name -> name.length() >= 3);
+                                names.stream().anyMatch(name -> name.startsWith("A"));
+                                names.stream().noneMatch(name -> name.endsWith("y"));
+                                */
 
-                                //System.out.println();
-
-                                //Random R = new Random();
-                                //IntStream St = R.ints(1_000_000_000);
-                                //OptionalInt M = St./*parallel().*/max();
-                                //System.out.println(M);
+                                /*
+                                Maximum bei der erstellung von 1miliar random Werten
+                                sehr rechenintensiv
+                                Random R = new Random();
+                                IntStream St = R.ints(1_000_000_000);
+                                OptionalInt M = St.parallel().max();
+                                System.out.println(M);*/
                         }
 
                         // Reduzieren/Aufsammeln
