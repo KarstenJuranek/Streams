@@ -507,7 +507,7 @@ public class Main {
                         StringBuilder sb2 = new StringBuilder();
                         sb2.append(StringList4);
                         String result4 = sb2.toString();
-                        System.out.println("StringBuilder:\t" + result4);
+                        //System.out.println("StringBuilder:\t" + result4);
 
                         // 4) Umwandlung von Integer-Array (Integer[]) in int-Array (int[]) und umgekehrt
 
@@ -517,11 +517,15 @@ public class Main {
                         List<String> stringList5 = List.of("anna", "marvin", "otto", "karsten");
                         List<String> anagrams = new ArrayList<>();
 
-                        String regexPattern = "(?i)(?<=\\G.?)(?=.*(.))";
-                        Pattern pattern = Pattern.compile(regexPattern);
-                        for (String name : stringList5) {
-                                String sortedName = sortString(name, pattern);
-                                anagrams.add(sortedName);
+                        for (int i = 0; i < stringList5.size(); i++) {
+                                String currentWord = stringList5.get(i);
+                                for (int j = i + 1; j < stringList5.size(); j++) {
+                                        String nextWord = stringList5.get(j);
+                                        if (areAnagrams(currentWord, nextWord)) {
+                                                anagrams.add(currentWord);
+                                                anagrams.add(nextWord);
+                                        }
+                                }
                         }
                         System.out.println("Anagramme:\t" + anagrams);
 
@@ -543,11 +547,14 @@ public class Main {
                 }
         }
 
-        private static String sortString(String inputString, Pattern pattern) {
-                // Ersetzen der Zeichenfolgen durch sortierte Zeichenfolgen
-                String sortedString = pattern.matcher(inputString).replaceAll("$1");
+        private static boolean areAnagrams(String word1, String word2) {
+                // Sortieren der Buchstaben in beiden Wörtern
+                char[] chars1 = word1.toCharArray();
+                char[] chars2 = word2.toCharArray();
+                Arrays.sort(chars1);
+                Arrays.sort(chars2);
 
-                // Kleinschreibung, um Groß-/Kleinschreibung zu ignorieren
-                return sortedString.toLowerCase();
+                // Überprüfen, ob die sortierten Buchstaben übereinstimmen
+                return Arrays.equals(chars1, chars2);
         }
 }
