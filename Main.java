@@ -491,10 +491,39 @@ public class Main {
                         crossSum.forEach(B -> System.out.println("Quersummer:\t" + B));
 
                         // 3) Alle Ziffern der Liste L in StringBuilder aufsammeln zu "0123456789"
+                        List<Integer> List_1_9 = List.of(0, 1, 2, 1, 4, 5, 1, 7, 8, 9, 10, 11);
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 0; i <= 9; i++) {
+                                if (List_1_9.contains(i)) {
+                                        sb.append(i);
+                                }
+                        }
+
+                        String result = sb.toString().replaceAll("1", "4");
+                        String result2 = sb.reverse().toString();
+                        Integer result3 = sb.length();
+
+                        List<String> StringList4 = List.of("Anna", "Marvin", "Otto", "Karsten");
+                        StringBuilder sb2 = new StringBuilder();
+                        sb2.append(StringList4);
+                        String result4 = sb2.toString();
+                        System.out.println("StringBuilder:\t" + result4);
 
                         // 4) Umwandlung von Integer-Array (Integer[]) in int-Array (int[]) und umgekehrt
 
                         // 5) Fibonacci zahlen von 1-100 wiedergeben
+
+                        // 6) Suche nach Anagramen
+                        List<String> stringList5 = List.of("anna", "marvin", "otto", "karsten");
+                        List<String> anagrams = new ArrayList<>();
+
+                        String regexPattern = "(?i)(?<=\\G.?)(?=.*(.))";
+                        Pattern pattern = Pattern.compile(regexPattern);
+                        for (String name : stringList5) {
+                                String sortedName = sortString(name, pattern);
+                                anagrams.add(sortedName);
+                        }
+                        System.out.println("Anagramme:\t" + anagrams);
 
                         // Beispiel für 'interfering function'
                         {
@@ -506,11 +535,19 @@ public class Main {
                                 oder der Inhalt des Streams sich ändert und nicht sicher parallelisiert werden kann
                                 List<Integer> LL = new ArrayList<>(L);
                                 List<Integer>
-                                    LLL = LL.stream().reduce(LL,        // interfering!
-                                             (X, Y) -> { X.add(Y); return X; },
-                                             (L1, L2) -> { L1.addAll(L2); return L1; });
+                                LLL = LL.stream().reduce(LL,        // interfering!
+                                (X, Y) -> { X.add(Y); return X; },
+                                (L1, L2) -> { L1.addAll(L2); return L1; });
                                 System.out.println(LL+" / "+LLL);*/
                         }
                 }
+        }
+
+        private static String sortString(String inputString, Pattern pattern) {
+                // Ersetzen der Zeichenfolgen durch sortierte Zeichenfolgen
+                String sortedString = pattern.matcher(inputString).replaceAll("$1");
+
+                // Kleinschreibung, um Groß-/Kleinschreibung zu ignorieren
+                return sortedString.toLowerCase();
         }
 }
