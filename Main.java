@@ -360,7 +360,7 @@ public class Main {
 
                 // Terminale/Finale Stream-Reduktion: Daten zusammenfassen
                 {
-                        List<Integer> L = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+                        List<Integer> L = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11);
 
                         // Finden/Matchen
                         {
@@ -371,7 +371,6 @@ public class Main {
                                                 O4 = L.stream().max(Integer::compare);
                                 System.out.println("findFirst:\t" + O1 + "\nfindAny:\t" + O2);
                                 System.out.println("min:\t" + O3 + "\nmax:\t" + O4);
-
 
                                 // Matches dienen nur zur überprüfung der Listen bspw. ob es Personen mit A anungsbuchstaben gibt etc
                                 boolean B1 = L.stream().allMatch(X -> X < 10), // Überprüfung des gesamten Streams
@@ -394,46 +393,103 @@ public class Main {
                                 System.out.println(M);*/
                         }
 
-                        // Reduzieren/Aufsammeln
+                        // Reduzieren (reduce)/Aufsammeln(collect)
                         {
                                 // Reduce
                                 int Sum = L.stream().reduce(0, (Z, X) -> Z + X); // Integer::sum
                                 Optional<Integer> Summy = L.stream().reduce((Z, X) -> Z + X);
-                                //System.out.println("Summen: "+Sum + ", " + Summy);
+                                System.out.println("Summen: \t" + Sum + ", " + Summy);
+
+                                List<String> StringListReduce = new ArrayList(List.of("as", "soon", "as", "possible"));
+                                String input = "as soon as possible";
+                                String akronym = Arrays.stream(input.split("\\s+"))
+                                                .map(x -> String.valueOf(Character.toUpperCase(x.charAt(0))))
+                                                .collect(Collectors.joining());
+                                //Alternativ könnte die map auch auf zwei maps gesplitted werden die erste mit value und die zweite mit tUC
+                                String onlyFirst = StringListReduce.stream()
+                                                .map(x -> String.valueOf(Character.toUpperCase(x.charAt(0))))
+                                                .collect(Collectors.joining());
+                                System.out.println("only First:\t" + onlyFirst + "\t" + akronym);
 
                                 String R = L.stream().reduce("", (S, X) -> S + X, String::concat);
-                                //System.out.println("Stringbildung: "+R);    // könnte parallelisiert werden
+                                int max = L.stream().reduce(Integer.MIN_VALUE, Integer::max);
+                                String concatR = StringListReduce.stream().reduce("", (x, y) -> x + " " + y);
+                                System.out.println("Stringbildung:\t " + R + "\t" + max + "\t" + concatR); // könnte parallelisiert werden
 
                                 // Collect
-                                Set<Integer> Zet1 = L.stream().collect(HashSet::new, (Z, X) -> Z.add(X / 2),
+                                Set<Integer> Set1 = L.stream().collect(HashSet::new, (Z, X) -> Z.add(X / 3),
                                                 HashSet::addAll);
-                                Set<Integer> Zet2 = L.stream().collect(Collectors.toUnmodifiableSet());
-                                //System.out.println("Mengenbildung: "+Zet1 + ", " + Zet2);
+                                Set<Integer> Set2 = L.stream().collect(Collectors.toUnmodifiableSet());
+                                System.out.println("\nMengenbildung: " + Set1 + ", " + Set2);
 
+                                // Eindeutige Buchstaben
+                                Set<Character> uniqueChars = StringListReduce.stream().flatMapToInt(CharSequence::chars)
+                                                .mapToObj(c -> (char) c).collect(Collectors.toSet());
+                                System.out.println("Eindeutige Buchstaben: \t" + uniqueChars);
+
+                                // Buchstaben zählen
+                                Map<Character, Integer> count = StringListReduce.stream()
+                                                .flatMapToInt(CharSequence::chars)
+                                                .mapToObj(c -> (char) c)
+                                                .collect(Collectors.groupingBy(c -> c, Collectors.summingInt(c -> 1)));
+                                System.out.println("Summing Chars" + count);
+
+                                // Mit Long Werten
+                                Map<Character, Long> count2 = StringListReduce.stream()
+                                                .flatMapToInt(CharSequence::chars)
+                                                .mapToObj(c -> (char) c)
+                                                .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+                                System.out.println(count2);
+
+                                // Average berechnung
                                 Double Avrg = L.stream().collect(Collectors.averagingDouble(X -> (double) X));
-                                //System.out.println("Durchschnitt: "+Avrg);
+                                System.out.println("Durchschnitt: " + Avrg);
+                                double Average = L.stream().collect(Collectors.averagingDouble(Integer::doubleValue));
+                                System.out.println("Summen: " + Sum + ",\t " + Summy + ", " + "\nAverage: "+Average);
 
-                                String T = L.stream().map(X -> "" + X)
+                                double avgStringLength = StringListReduce.stream().mapToInt(String::length).average()
+                                                .orElse(0.0);
+                                System.out.println("Average String Length:\t" + avgStringLength);
+
+                                String T = StringListReduce.stream().map(X -> "" + X)
                                                 .collect(Collectors.joining(", ", "[", "]"));
-                                //System.out.println("String-Verknüpfung: "+T);
+                                System.out.println("String-Verknüpfung: " + T);
 
                                 //System.out.println();
                         }
 
                         // Aufgaben (intermediäre Operationen sind erlaubt):
                         // 1) Fakultät von N berechnen (Fakultät von 0 ist 1)
+
+
+
                         // 2) Quersumme eines Strings berechnen (z.B. "122333" = 14)
+
+
+
                         // 3) Alle Ziffern der Liste L in StringBuilder aufsammeln zu "0123456789"
+
+
+
                         // 4) Umwandlung von Integer-Array (Integer[]) in int-Array (int[]) und umgekehrt
+
+
+
 
                         // Beispiel für 'interfering function'
                         {
+                                /*
+                                reduce ist die Interfering Funktion, da sie den Stream während der Laufzeit
+                                verändern will, was wiederum nciht möglich ist.Die Reduce Fuktion ist nicht dafür
+                                gedacht die Liste zu bearbeiten, eher zu um ein einzelnes Element wiederzugeben.
+                                IF ist demnach ein Konflikt in der Parallelisierung des Streams, bei dem die Struktur
+                                oder der Inhalt des Streams sich ändert und nicht sicher parallelisiert werden kann
                                 List<Integer> LL = new ArrayList<>(L);
-                                /*List<Integer>
+                                List<Integer>
                                     LLL = LL.stream().reduce(LL,        // interfering!
-                                             (Li, X) -> { Li.add(X); return Li; },
-                                             (L1, L2) -> { L1.addAll(L2); return L1; });*/
-                                //System.out.println(LL+" / "+LLL);
+                                             (X, Y) -> { X.add(Y); return X; },
+                                             (L1, L2) -> { L1.addAll(L2); return L1; });
+                                System.out.println(LL+" / "+LLL);*/
                         }
                 }
         }
