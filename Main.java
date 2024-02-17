@@ -360,7 +360,7 @@ public class Main {
 
                 // Terminale/Finale Stream-Reduktion: Daten zusammenfassen
                 {
-                        List<Integer> L = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11);
+                        List<Integer> L = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
 
                         // Finden/Matchen
                         {
@@ -445,7 +445,7 @@ public class Main {
                                 Double Avrg = L.stream().collect(Collectors.averagingDouble(X -> (double) X));
                                 System.out.println("Durchschnitt: " + Avrg);
                                 double Average = L.stream().collect(Collectors.averagingDouble(Integer::doubleValue));
-                                System.out.println("Summen: " + Sum + ",\t " + Summy + ", " + "\nAverage: "+Average);
+                                System.out.println("Summen: " + Sum + ",\t " + Summy + ", " + "\nAverage: " + Average);
 
                                 double avgStringLength = StringListReduce.stream().mapToInt(String::length).average()
                                                 .orElse(0.0);
@@ -460,21 +460,41 @@ public class Main {
 
                         // Aufgaben (intermediäre Operationen sind erlaubt):
                         // 1) Fakultät von N berechnen (Fakultät von 0 ist 1)
-
-
+                        Random N = new Random();
+                        int amount = 5;
+                        Map<Integer, Integer> faculties = N.ints(amount, 0, 20).boxed()
+                                        .collect(Collectors.toMap(key -> key,
+                                                        key -> {
+                                                                // Iterierung über alle zahlen bis zur zufallszahl
+                                                                int n = key.intValue(); // zuweisen des Primitiven Datentypes
+                                                                int result = 1; // Beginnend ab 1 da 0&1 Fak = 1 ist
+                                                                for (int i = 2; i <= n; i++) { //hochzählen der Zahlen
+                                                                        result *= i; // Kurzschreibung result = result * i
+                                                                }
+                                                                return result;
+                                                        }));
+                        System.out.println("Fakultäten:\t" + faculties);
 
                         // 2) Quersumme eines Strings berechnen (z.B. "122333" = 14)
 
-
+                        List<String> numberList = new ArrayList<>(List.of("12845", "12", "34", "41"));
+                        List<Integer> crossSum = numberList.stream().mapToInt(Integer::parseInt)
+                                        .map(x -> {
+                                                int sum = 0;
+                                                while (x != 0) {
+                                                        // so wird jede Zahl einzeln durch den Rest % zur Summe hinzugefügt
+                                                        sum += x % 10; //sum = sum + (x%10)
+                                                        x /= 10;
+                                                }
+                                                return sum;
+                                        }).boxed().collect(Collectors.toList());
+                        crossSum.forEach(B -> System.out.println("Quersummer:\t" + B));
 
                         // 3) Alle Ziffern der Liste L in StringBuilder aufsammeln zu "0123456789"
 
-
-
                         // 4) Umwandlung von Integer-Array (Integer[]) in int-Array (int[]) und umgekehrt
 
-
-
+                        // 5) Fibonacci zahlen von 1-100 wiedergeben
 
                         // Beispiel für 'interfering function'
                         {
