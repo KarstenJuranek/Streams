@@ -505,9 +505,14 @@ public class Main {
 
                         List<String> StringList4 = List.of("Anna", "Marvin", "Otto", "Karsten");
                         StringBuilder sb2 = new StringBuilder();
-                        sb2.append(StringList4);
-                        
-                        String result4 = sb2.toString().replaceAll("[Aa]", "u");
+
+                        //String Listen Elemente einzeln eingefügt, da die Liste sonst als Array mit den Klammern
+                        //eingefügt werden deshalb for für jedes einzelne Element und das zweite append für das LZ
+                        for(String x : StringList4){
+                        sb2.append(x).append(" ");}
+
+                        // Modifikation mithilfe von Regex
+                        String result4 = sb2.reverse().toString().replaceAll("[Aa]", "u");
                         System.out.println("StringBuilder:\t" + result4);
 
                         // 4) Umwandlung von Integer-Array (Integer[]) in int-Array (int[]) und umgekehrt
