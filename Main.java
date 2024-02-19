@@ -369,6 +369,7 @@ public class Main {
                                                 O2 = L.stream().findAny(),
                                                 O3 = L.stream().min(Integer::compare),
                                                 O4 = L.stream().max(Integer::compare);
+                                                O5 = L.stream().sum(Integer::compare);
                                 System.out.println("findFirst:\t" + O1 + "\nfindAny:\t" + O2);
                                 System.out.println("min:\t" + O3 + "\nmax:\t" + O4);
 
