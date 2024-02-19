@@ -506,28 +506,15 @@ public class Main {
                         List<String> StringList4 = List.of("Anna", "Marvin", "Otto", "Karsten");
                         StringBuilder sb2 = new StringBuilder();
                         sb2.append(StringList4);
-                        String result4 = sb2.toString();
-                        //System.out.println("StringBuilder:\t" + result4);
+                        
+                        String result4 = sb2.toString().replaceAll("[Aa]", "u");
+                        System.out.println("StringBuilder:\t" + result4);
 
                         // 4) Umwandlung von Integer-Array (Integer[]) in int-Array (int[]) und umgekehrt
 
                         // 5) Fibonacci zahlen von 1-100 wiedergeben
 
                         // 6) Suche nach Anagramen
-                        List<String> stringList5 = List.of("anna", "marvin", "otto", "karsten");
-                        List<String> anagrams = new ArrayList<>();
-
-                        for (int i = 0; i < stringList5.size(); i++) {
-                                String currentWord = stringList5.get(i);
-                                for (int j = i + 1; j < stringList5.size(); j++) {
-                                        String nextWord = stringList5.get(j);
-                                        if (areAnagrams(currentWord, nextWord)) {
-                                                anagrams.add(currentWord);
-                                                anagrams.add(nextWord);
-                                        }
-                                }
-                        }
-                        System.out.println("Anagramme:\t" + anagrams);
 
                         // Beispiel für 'interfering function'
                         {
@@ -545,16 +532,5 @@ public class Main {
                                 System.out.println(LL+" / "+LLL);*/
                         }
                 }
-        }
-
-        private static boolean areAnagrams(String word1, String word2) {
-                // Sortieren der Buchstaben in beiden Wörtern
-                char[] chars1 = word1.toCharArray();
-                char[] chars2 = word2.toCharArray();
-                Arrays.sort(chars1);
-                Arrays.sort(chars2);
-
-                // Überprüfen, ob die sortierten Buchstaben übereinstimmen
-                return Arrays.equals(chars1, chars2);
         }
 }
