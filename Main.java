@@ -140,7 +140,7 @@ public class Main {
                         // +1 damit auch der Buchstabe Z generiert wird
                         // Da jeder ASCII Wert eine Ganzzahl repräsentiert können die Werte zwischen 
                         // Start und Endpunkt wiedergegeben werden.
-                        IntStream alphaStream3 = IntStream.range('A', 'Z' + 1);
+                        IntStream alphaStream3 = IntStream.range('0', '6' + 1);
                         alphaStream3.mapToObj(X -> (char) X).forEach(System.out::print);
                         System.out.println();
 
@@ -360,7 +360,7 @@ public class Main {
 
                 // Terminale/Finale Stream-Reduktion: Daten zusammenfassen
                 {
-                        List<Integer> L = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+                        List<Integer> L = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
                         // Finden/Matchen
                         {
@@ -508,18 +508,60 @@ public class Main {
 
                         //String Listen Elemente einzeln eingefügt, da die Liste sonst als Array mit den Klammern
                         //eingefügt werden deshalb for für jedes einzelne Element und das zweite append für das LZ
-                        for(String x : StringList4){
-                        sb2.append(x).append(" ");}
+                        for (String x : StringList4) {
+                                sb2.append(x).append(" ");
+                        }
 
                         // Modifikation mithilfe von Regex
                         String result4 = sb2.reverse().toString().replaceAll("[Aa]", "u");
                         System.out.println("StringBuilder:\t" + result4);
 
                         // 4) Umwandlung von Integer-Array (Integer[]) in int-Array (int[]) und umgekehrt
+                        Integer[] iArray = { 1, 2, 3, 4, 5 };
+                        int[] intArray = Arrays.stream(iArray).mapToInt(Integer::intValue).toArray();
+                        System.out.println("Array Umwanldung:\t");
+                        //For Ausgabe für die Ausgabe des Arrays, da die Abhängigkeit der Länge beachtet werden muss
+                        for (int i = 0; i < intArray.length; i++) {
+                                System.out.print(intArray[i] + ", ");
+                                if (i < intArray.length - 1) {
+                                }
+                        }
+                        // Ausgabe als String
+                        System.out.println("\nStringausgabe:\t" + Arrays.toString(intArray));
+                        // in int[] können nur primitive Ganzzahlen gespeichert werden in Integer[] hingegen w erden Integer
+                        // Objekte abgespeichert.
+
+                        //4.2 Buchstaben in ascii Zahl und diese int ein int Array speichern
+                        List<String> randomLetters = new ArrayList<>(List.of("A", "B", "CD"));
+                        int[] asciiValues = randomLetters.stream().mapToInt(x -> (int) x.charAt(0)).toArray();
+                        System.out.println("Strings in ASCII:\t");
+                        for (int i = 0; i < asciiValues.length; i++) {
+                                System.out.print(asciiValues[i] + " ");
+                                if (i < asciiValues.length - 1) {
+                                }
+                                ;
+                        }
+
+                        List<Integer> asciiValues2 = randomLetters.stream().flatMapToInt(x -> x.chars()).boxed()
+                                        .collect(Collectors.toList());
+                        System.out.println("Möglichkeit 2:\t" + asciiValues2);
+
 
                         // 5) Fibonacci zahlen von 1-100 wiedergeben
 
                         // 6) Suche nach Anagramen
+
+                        // 7) String Zahlen zu Integer werte wandeln und dann in ein int[] abgepeichern.
+
+                        List<String> stringNumbers = new ArrayList<>(List.of("1", "2", "3", "4"));
+                        Integer[] inArray = stringNumbers.stream().map(Integer::valueOf).toArray(Integer[]::new);
+                        int[] numberArray = Arrays.stream(inArray).mapToInt(Integer::intValue).toArray();
+                        System.out.println("Strings zu Integer Array:\t");
+                        for (int i = 0; i < numberArray.length; i++) {
+                                System.out.print(numberArray[i] + ", ");
+                                if (i < numberArray.length - 1) {
+                                }
+                        }
 
                         // Beispiel für 'interfering function'
                         {
