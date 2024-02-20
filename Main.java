@@ -369,7 +369,6 @@ public class Main {
                                                 O2 = L.stream().findAny(),
                                                 O3 = L.stream().min(Integer::compare),
                                                 O4 = L.stream().max(Integer::compare);
-                                                O5 = L.stream().sum(Integer::compare);
                                 System.out.println("findFirst:\t" + O1 + "\nfindAny:\t" + O2);
                                 System.out.println("min:\t" + O3 + "\nmax:\t" + O4);
 
@@ -547,10 +546,19 @@ public class Main {
                                         .collect(Collectors.toList());
                         System.out.println("Möglichkeit 2:\t" + asciiValues2);
 
-
                         // 5) Fibonacci zahlen von 1-100 wiedergeben
+                        List<Integer> fibo = Stream.iterate(new int[] { 0, 1 }, x -> new int[] { x[1], x[0] + x[1] })
+                                        .limit(10).map(x -> x[0]).collect(Collectors.toList());
+                        System.out.println("Fibonacci Zahlen:\t" + fibo);
 
                         // 6) Suche nach Anagramen
+
+                        // 6.1) Stringlist zu UpperCase
+                        List<String> letter = new ArrayList<>(List.of("Hello", "World", "!"));
+                        String upperCaseStream = letter.stream().map(String::toUpperCase)
+                                        .collect(Collectors.joining(" "));
+                        List<String> upperCList = letter.stream().map(String::toUpperCase).collect(Collectors.toList());
+                        System.out.println("UpperCase Stream:\t" + upperCaseStream + upperCList);
 
                         // 7) String Zahlen zu Integer werte wandeln und dann in ein int[] abgepeichern.
 
