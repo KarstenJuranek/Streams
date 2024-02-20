@@ -291,8 +291,8 @@ public class Main {
                         // 2) Alle 'bad words' in Liste ausmarkieren, z.B. stattdessen
                         //    Standardtext ausgeben ("fuck" => ":-)")
 
-                        List<String> proveList = new ArrayList<>(List.of("hello", "fuck", "good", "friendly", "nigga")),
-                                        badWords = new ArrayList<>(List.of("fuck", "nigga")),
+                        List<String> proveList = new ArrayList<>(List.of("hello", "fuck", "good", "friendly", "digga")),
+                                        badWords = new ArrayList<>(List.of("fuck", "digga")),
                                         //kein Filter sondern Map da die Liste verändert werden muss
                                         correctedList2 = proveList.stream().map(X -> badWords.contains(X) ? ":-D" : X)
                                                         .collect(Collectors.toList());
