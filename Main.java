@@ -549,6 +549,7 @@ public class Main {
                         // 5) Fibonacci zahlen von 1-100 wiedergeben
                         List<Integer> fibo = Stream.iterate(new int[] { 0, 1 }, x -> new int[] { x[1], x[0] + x[1] })
                                         .limit(10).map(x -> x[0]).collect(Collectors.toList());
+                        //List<Integer> fibo2 = Stream.iterate(null, null)
                         System.out.println("Fibonacci Zahlen:\t" + fibo);
 
                         // 6) Suche nach Anagramen
@@ -571,6 +572,39 @@ public class Main {
                                 if (i < numberArray.length - 1) {
                                 }
                         }
+                        System.out.println();
+
+                        // Transformiere alle Strings einer Liste in Großbuchstaben und filtere 0 und Leerstrings heraus
+                        List<String> listToFilter = new ArrayList<>(List.of("Hello", "62", "Wolrd", " ", "!"));
+                        List<String> filteredUCList = listToFilter.stream()
+                                        .map(String::toUpperCase)
+                                        .filter(x -> x.chars().allMatch(Character::isLetter) || x.equals("!"))
+                                        .collect(Collectors.toList());
+                        System.out.println("Aufgabe 1:\t" + filteredUCList);
+
+                        //Möglichkeit 2 mit Regex
+                        List<String> listToFilter2 = new ArrayList<>(List.of("Hello", "62", "Wolrd", " ", "!"));
+                        List<String> filteredUCList2 = listToFilter2.stream()
+                                        .map(String::toUpperCase)
+                                        .filter(x -> Pattern.matches("[a-zA-Z!]+", x) && !x.isEmpty()
+                                                        && !x.equals(" "))
+                                        .collect(Collectors.toList());
+                        System.out.println("Aufgabe 1:\t" + filteredUCList2);
+
+                        // Filter alle Zahlen aus einem String und zähle wie viele vorkommen
+                        String testString = "Hello 0 deer l0ovely W0orld!";
+                        String testFilter = testString.chars()
+                                        .filter(x -> !Character.isDigit((char) x))
+                                        .mapToObj(y -> String.valueOf((char) y))
+                                        .collect(Collectors.joining());
+                        long numberOfDigits = testString.chars()
+                                        .filter(Character::isDigit)
+                                        .count();
+
+                        String combinedString = "\nString:\t" + testFilter + "\n" + "Anzahl der Zahlen:\t"
+                                        + numberOfDigits;
+
+                        System.out.println("Aufgabe 2:\t" + combinedString);
 
                         // Beispiel für 'interfering function'
                         {
